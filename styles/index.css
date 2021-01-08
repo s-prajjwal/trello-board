@@ -1,0 +1,178 @@
+body *{
+    box-sizing: border-box;
+}
+
+#content-head{
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#add-list-button{
+    width: 100px;
+    cursor: pointer;
+    font-family: monospace;
+}
+
+#content-body{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 50px;
+    min-height: 400px;
+}
+
+.modal-wrapper{
+    width: 600px;
+    position: absolute;
+    top: 30%;
+    left: 35%;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+#add-list-modal {
+    height: 200px;
+}
+
+#add-card-modal {
+    height: 350px;
+}
+
+#field-label{
+    font-size: 18px;
+    font-family: monospace;
+}
+
+.field-input{
+    height: 40px;
+    width: 95%;
+    margin: 10px 0;
+    font-size: 18px;
+    padding: 0 10px;
+    font-family: monospace;
+}
+
+.field-input-area {
+    height: 100px;
+    width: 95%;
+    margin: 10px 0;
+    font-size: 18px;
+    padding: 5px 10px;
+}
+
+#create-list-btn-wrapper{
+    display: flex;
+    margin-top: 10px;
+}
+
+.create-btn{
+    width: 120px;
+    height: 50px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-family: monospace;
+}
+
+#list-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.list{
+    height: 700px;
+    width: 300px;
+    border: 1px solid black;
+    margin: 10px 20px;
+    border-radius: 8px;
+}
+
+.list-header {
+    height: 7%;
+    border-bottom: 1px solid black;
+    text-align: center;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-family: monospace;
+}
+
+.list-body {
+    height: 83%;
+    padding: 5px;
+    position: relative;
+    overflow-y: auto;
+    font-family: monospace;
+}
+
+.list-footer {
+    height: 10%;
+    border-top: 1px solid black;
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+}
+
+#list-close{
+    cursor: pointer;
+}
+
+#card-close {
+    cursor: pointer;
+}
+
+#list-title {
+    text-align: center;
+    font-size: 26px;
+    text-transform: capitalize;
+}
+
+#add-card {
+    /* position: absolute; */
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid black;
+    text-align: center;
+    font-size: 42px;
+    bottom: 10%;
+    left: 40%;
+    cursor: pointer;
+}
+
+#add-card:hover {
+    box-shadow: 2px 7px 6px #aaaaaa;
+}
+
+.list-card{
+    height: 200px;
+    width: 100%;
+    margin: 5px 0;
+    padding: 5px;
+    color: #000;
+    border: 1px solid black;
+    overflow-y: auto;
+    max-height: 200px;
+}
+
+.card-header {
+    height: 20%;
+    font-size: 20px;
+    border-bottom: 1px solid black;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+    text-transform: capitalize;
+    font-family: monospace;
+}
+
+.card-body{
+    height: 80%;
+    font-size: 18px;
+    padding: 5px 0 5px 10px;
+    text-transform: capitalize;
+    font-family: monospace;
+}
