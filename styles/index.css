@@ -1,5 +1,23 @@
+body {
+    background-color: lightgrey;
+}
+
 body *{
     box-sizing: border-box;
+}
+
+#main-wrapper{
+    max-width: 80%;
+    margin: 20px auto;
+    border-radius: 8px;
+}
+
+#body-heading {
+    text-align: center;
+    font-size: 48px;
+    font-family: monospace;
+    padding: 20px 0;
+    font-style: italic;
 }
 
 #content-head{
@@ -10,9 +28,24 @@ body *{
 }
 
 #add-list-button{
-    width: 100px;
+    width: 150px;
     cursor: pointer;
     font-family: monospace;
+    margin: 0 20px;
+    background-color: #ff9800;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    transition-duration: 0.3s;
+}
+
+#add-list-button:hover{
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+    background-color: #4CAF50;
 }
 
 #content-body{
@@ -31,6 +64,7 @@ body *{
     border: 1px solid black;
     border-radius: 8px;
     padding: 20px;
+    background-color: bisque;
 }
 
 #add-list-modal {
@@ -75,6 +109,9 @@ body *{
     cursor: pointer;
     margin-top: 10px;
     font-family: monospace;
+    background-color: palegreen;
+    border: none;
+    border-radius: 8px;
 }
 
 #list-row {
@@ -86,8 +123,9 @@ body *{
     height: 700px;
     width: 300px;
     border: 1px solid black;
-    margin: 10px 20px;
+    margin: 10px 30px;
     border-radius: 8px;
+    background-color: lightgoldenrodyellow;
 }
 
 .list-header {
@@ -116,11 +154,11 @@ body *{
     padding-top: 10px;
 }
 
-#list-close{
+.list-close{
     cursor: pointer;
 }
 
-#card-close {
+.card-close {
     cursor: pointer;
 }
 
@@ -131,19 +169,20 @@ body *{
 }
 
 .add-card {
-    /* position: absolute; */
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    border: 1px solid black;
+    border: 1px solid deeppink;
     text-align: center;
     font-size: 42px;
     bottom: 10%;
     left: 40%;
     cursor: pointer;
+    background-color: brown;
+    color: white;
 }
 
-#add-card:hover {
+.add-card:hover {
     box-shadow: 2px 7px 6px #aaaaaa;
 }
 
@@ -156,6 +195,7 @@ body *{
     border: 1px solid black;
     overflow-y: auto;
     max-height: 200px;
+    background-color: lightsalmon;
 }
 
 .card-header {

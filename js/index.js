@@ -3,7 +3,7 @@ const addListBtn = document.getElementById("add-list-button");
 
 addListBtn.addEventListener("click", showAddListModal);
 
-// function to show Add List Modal
+// function to show the Modal to Add List
 function showAddListModal() {
     // create a div for Modal and all input fileds to it
     // then append it to content-body/list-row div as the child
@@ -33,18 +33,17 @@ function showAddListModal() {
 // function to create a list
 function createList(title) {
     const newList = document.createElement("div");
-    const innerHtml = `<div class="list-header"><div id="list-title">${title}</div><img id="list-close" height="40%" src="./assets/close.svg" /></div><div id="list-body-${title}" class="list-body"></div><div class="list-footer"><div type="submit" class="add-card" id="add-card-${title}">+</div></div>`;
+    const innerHtml = `<div class="list-header"><div id="list-title">${title}</div><img class="list-close" id="list-close-${title}" height="50%" src="./assets/close.svg" /></div><div id="list-body-${title}" class="list-body"></div><div class="list-footer"><div type="submit" class="add-card" id="add-card-${title}">+</div></div>`;
     newList.innerHTML = innerHtml;
     newList.id = `${title}-list`;
     newList.className = "list";
     newList.setAttribute("ondragover", "allowDrop(event)");
     newList.setAttribute("ondrop", "drop(event)");
     listWrapper.appendChild(newList);
-    const closeIcon = document.getElementById("list-close");
+    const closeIcon = document.getElementById(`list-close-${title}`);
     closeIcon.addEventListener("click", function (event) {
         event.preventDefault();
-        document.getElementById(`${this.title}-list`).remove();
-        // deleteList(title);
+        this.parentNode.parentNode.remove();
     });
     const listBody = document.getElementById(`list-body-${title}`);
     const addCardBtn = document.getElementById(`add-card-${title}`);
@@ -55,6 +54,7 @@ function createList(title) {
     });
 }
 
+// function to show the Modal to add Add Card
 function showAddCardModal(parentNode) {
     const addCardModal = document.createElement("div");
     addCardModal.className = "modal-wrapper";
@@ -87,26 +87,14 @@ function createCard(parentNode, cardTitle, cardDesc) {
     newCard.id = `${cardTitle}-card`;
     newCard.setAttribute("draggable", true);
     newCard.setAttribute("ondragstart", "drag(event)");
-    const innerHtml = `<div class="card-header"><div>${cardTitle}</div><img id="card-close" height="40%" src="./assets/close.svg" /></div><div class="card-body">${cardDesc}</div>`;
+    const innerHtml = `<div class="card-header"><div>${cardTitle}</div><img class="card-close" id="card-close-${cardTitle}" height="40%" src="./assets/close.svg" /></div><div class="card-body">${cardDesc}</div>`;
     newCard.innerHTML = innerHtml;
     parentNode.appendChild(newCard);
-    const closeIcon = document.getElementById("card-close");
+    const closeIcon = document.getElementById(`card-close-${cardTitle}`);
     closeIcon.addEventListener("click", function (event) {
         event.preventDefault();
-        deleteCard(cardTitle);
+        this.parentNode.parentNode.remove();
     });
-}
-
-
-// function to delete a card
-function deleteCard(cardTitle) {
-    const card = document.getElementById(`${cardTitle}-card`);
-    card.remove();
-}
-
-function deleteList(listTitle) {
-    const list = document.getElementById(`${listTitle}-list`);
-    list.remove();
 }
 
 function drag(event) {
@@ -119,6 +107,7 @@ function allowDrop(event) {
 
 function drop(event) {
     event.preventDefault();
+    if(event.target.className === "card-body") return;
     const data = event.dataTransfer.getData("text");
-    event.target.appendChild(document.getElementById(data));
+    event.target.prepend(document.getElementById(data));
 }
