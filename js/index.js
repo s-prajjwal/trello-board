@@ -1,7 +1,7 @@
 const listWrapper = document.getElementById("list-row");
 const addListBtn = document.getElementById("add-list-button");
 
-addListBtn.addEventListener("click", showAddListModal); 
+addListBtn.addEventListener("click", showAddListModal);
 
 // function to show Add List Modal
 function showAddListModal() {
@@ -33,7 +33,7 @@ function showAddListModal() {
 // function to create a list
 function createList(title) {
     const newList = document.createElement("div");
-    const innerHtml = `<div class="list-header"><div id="list-title">${title}</div><img id="list-close" height="40%" src="./assets/close.svg" /></div><div id="list-body-${title}" class="list-body"></div><div class="list-footer"><div type="submit" id="add-card">+</div></div>`;
+    const innerHtml = `<div class="list-header"><div id="list-title">${title}</div><img id="list-close" height="40%" src="./assets/close.svg" /></div><div id="list-body-${title}" class="list-body"></div><div class="list-footer"><div type="submit" class="add-card" id="add-card-${title}">+</div></div>`;
     newList.innerHTML = innerHtml;
     newList.id = `${title}-list`;
     newList.className = "list";
@@ -43,21 +43,19 @@ function createList(title) {
     const closeIcon = document.getElementById("list-close");
     closeIcon.addEventListener("click", function (event) {
         event.preventDefault();
-        // console.log(this, event);
-        deleteList(title);
+        document.getElementById(`${this.title}-list`).remove();
+        // deleteList(title);
     });
     const listBody = document.getElementById(`list-body-${title}`);
-    const addCardBtn = document.getElementById("add-card");
+    const addCardBtn = document.getElementById(`add-card-${title}`);
     addCardBtn.addEventListener("click", function (event) {
         event.preventDefault();
-        console.log(this);
         // createCard(this.parentNode);
         showAddCardModal.call(this, listBody);
     });
 }
 
 function showAddCardModal(parentNode) {
-    console.log("this is showAddCardModal");
     const addCardModal = document.createElement("div");
     addCardModal.className = "modal-wrapper";
     addCardModal.id="add-card-modal";
@@ -84,7 +82,6 @@ function showAddCardModal(parentNode) {
 
 // function to create a card
 function createCard(parentNode, cardTitle, cardDesc) {
-    // console.log("Inside createCard");
     const newCard = document.createElement("div");
     newCard.className = "list-card";
     newCard.id = `${cardTitle}-card`;
@@ -96,7 +93,6 @@ function createCard(parentNode, cardTitle, cardDesc) {
     const closeIcon = document.getElementById("card-close");
     closeIcon.addEventListener("click", function (event) {
         event.preventDefault();
-        // console.log(this, event);
         deleteCard(cardTitle);
     });
 }
@@ -111,17 +107,7 @@ function deleteCard(cardTitle) {
 function deleteList(listTitle) {
     const list = document.getElementById(`${listTitle}-list`);
     list.remove();
-    console.log("delete this list", listTitle);
 }
-
-
-// function makeInput(event) {
-//     event.innerHTML = `<input id=${event.target.id} value=${event.innerText}>`;
-// }
-
-// function makeDiv(event) {
-//     event.innerHTML - `<div id=${event.taget.id}>${event.innerText}</div>`;
-// }
 
 function drag(event) {
     event.dataTransfer.setData("text", event.target.id);
