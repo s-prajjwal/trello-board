@@ -3,22 +3,32 @@ const addListBtn = document.getElementById("add-list-button");
 
 addListBtn.addEventListener("click", showAddListModal);
 
+window.addEventListener("keyup", function(event) {
+    const addListModal = document.getElementById("add-list-modal");
+    const addCardModal = document.getElementById("add-card-modal");
+    if(event.key === "Escape") {
+        event.preventDefault();
+        if(addListModal) addListModal.remove();
+        if(addCardModal) addCardModal.remove();
+    }
+})
+
 // function to show the Modal to Add List
 function showAddListModal() {
     // create a div for Modal and all input fileds to it
     // then append it to content-body/list-row div as the child
-    const AddListModal = document.createElement("div");
-    AddListModal.className = "modal-wrapper";
-    AddListModal.id="add-list-modal";
-    const innerHtml = `<div id="field-label">List Name</div><input type="text" class="field-input" id="list-name-input" name="list-name" /><div id="create-list-btn-wrapper"><button id="create-list-btn" class="create-btn" type="submit">Create List</button></div>`;
-    AddListModal.innerHTML = innerHtml;
-    document.body.appendChild(AddListModal);
+    const addListModal = document.createElement("div");
+    addListModal.className = "modal-wrapper";
+    addListModal.id="add-list-modal";
+    const innerHtml = `<img class="modal-close" height="40%" src="./assets/close.svg" /><div id="field-label">List Name</div><input type="text" class="field-input" id="list-name-input" name="list-name" /><div id="create-list-btn-wrapper"><button id="create-list-btn" class="create-btn" type="submit">Create List</button></div><div class="modal-footer-note">Press Esc key to close this modal</div>`;
+    addListModal.innerHTML = innerHtml;
+    document.body.appendChild(addListModal);
     const createListBtn = document.getElementById("create-list-btn");
     createListBtn.addEventListener("click", function (event) {
         event.preventDefault();
         const newTitle = document.getElementById("list-name-input").value;
         createList(newTitle);
-        AddListModal.remove();
+        addListModal.remove();
     });
     // Pressing enter will submit the title and create a new list
     const listNameInput = document.getElementById("list-name-input");
@@ -27,6 +37,10 @@ function showAddListModal() {
             event.preventDefault();
             createListBtn.click();
         }
+    });
+    const modalCloseBtn = document.getElementsByClassName("modal-close");
+    modalCloseBtn[0].addEventListener("click", function() {
+        addListModal.remove();
     });
 }
 
@@ -58,7 +72,7 @@ function showAddCardModal(parentNode) {
     const addCardModal = document.createElement("div");
     addCardModal.className = "modal-wrapper";
     addCardModal.id="add-card-modal";
-    const innerHtml = `<div id="field-label">Card Title</div><input class="field-input" type="text" id="card-title-input"/><div id="field-label">Card Description</div><textarea class="field-input-area" type="text-area" id="card-desc-text-area"></textarea><div id="create-card-btn-wrapper"><button class="create-btn" id="create-card-btn" type="submit">Create Card</button></div>`;
+    const innerHtml = `<img class="modal-close" height="40%" src="./assets/close.svg" /><div id="field-label">Card Title</div><input class="field-input" type="text" id="card-title-input"/><div id="field-label">Card Description</div><textarea class="field-input-area" type="text-area" id="card-desc-text-area"></textarea><div id="create-card-btn-wrapper"><button class="create-btn" id="create-card-btn" type="submit">Create Card</button></div><div class="modal-footer-note">Press Esc key to close this modal</div>`;
     addCardModal.innerHTML = innerHtml;
     document.body.appendChild(addCardModal);
     const createCardBtn = document.getElementById("create-card-btn");
@@ -76,7 +90,10 @@ function showAddCardModal(parentNode) {
             createCardBtn.click();
         }
     });
-
+    const modalCloseBtn = document.getElementsByClassName("modal-close");
+    modalCloseBtn[0].addEventListener("click", function() {
+        this.addCardModal.remove();
+    });
 }
 
 // function to create a card
