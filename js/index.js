@@ -3,23 +3,23 @@ const addListBtn = document.getElementById("add-list-button");
 
 addListBtn.addEventListener("click", showAddListModal);
 
-window.addEventListener("keyup", function(event) {
+window.addEventListener("keyup", function (event) {
     const addListModal = document.getElementById("add-list-modal");
     const addCardModal = document.getElementById("add-card-modal");
-    if(event.key === "Escape") {
+    if (event.key === "Escape") {
         event.preventDefault();
-        if(addListModal) addListModal.remove();
-        if(addCardModal) addCardModal.remove();
+        if (addListModal) addListModal.remove();
+        if (addCardModal) addCardModal.remove();
     }
 })
 
 // function to show the Modal to Add List
 function showAddListModal() {
-    // create a div for Modal and all input fileds to it
+    // create a div for Modal and all input fields to it
     // then append it to content-body/list-row div as the child
     const addListModal = document.createElement("div");
     addListModal.className = "modal-wrapper";
-    addListModal.id="add-list-modal";
+    addListModal.id = "add-list-modal";
     const innerHtml = `<img class="modal-close" height="40%" src="./assets/close.svg" /><div id="field-label">List Name</div><input type="text" class="field-input" id="list-name-input" name="list-name" /><div id="create-list-btn-wrapper"><button id="create-list-btn" class="create-btn" type="submit">Create List</button></div><div class="modal-footer-note">Press Esc key to close this modal</div>`;
     addListModal.innerHTML = innerHtml;
     document.body.appendChild(addListModal);
@@ -39,7 +39,7 @@ function showAddListModal() {
         }
     });
     const modalCloseBtn = document.getElementsByClassName("modal-close");
-    modalCloseBtn[0].addEventListener("click", function() {
+    modalCloseBtn[0].addEventListener("click", function () {
         addListModal.remove();
     });
 }
@@ -71,12 +71,12 @@ function createList(title) {
 function showAddCardModal(parentNode) {
     const addCardModal = document.createElement("div");
     addCardModal.className = "modal-wrapper";
-    addCardModal.id="add-card-modal";
+    addCardModal.id = "add-card-modal";
     const innerHtml = `<img class="modal-close" height="40%" src="./assets/close.svg" /><div id="field-label">Card Title</div><input class="field-input" type="text" id="card-title-input"/><div id="field-label">Card Description</div><textarea class="field-input-area" type="text-area" id="card-desc-text-area"></textarea><div id="create-card-btn-wrapper"><button class="create-btn" id="create-card-btn" type="submit">Create Card</button></div><div class="modal-footer-note">Press Esc key to close this modal</div>`;
     addCardModal.innerHTML = innerHtml;
     document.body.appendChild(addCardModal);
     const createCardBtn = document.getElementById("create-card-btn");
-    createCardBtn.addEventListener("click", function(event){
+    createCardBtn.addEventListener("click", function (event) {
         event.preventDefault();
         const newCardTitle = document.getElementById("card-title-input").value;
         const newCardDesc = document.getElementById("card-desc-text-area").value;
@@ -91,7 +91,7 @@ function showAddCardModal(parentNode) {
         }
     });
     const modalCloseBtn = document.getElementsByClassName("modal-close");
-    modalCloseBtn[0].addEventListener("click", function() {
+    modalCloseBtn[0].addEventListener("click", function () {
         addCardModal.remove();
     });
 }
@@ -125,13 +125,13 @@ function allowDrop(event) {
 
 function drop(event) {
     event.preventDefault();
-    if(event.target.className !== "list-body") return;
+    if (event.target.className !== "list-body") return;
     const data = event.dataTransfer.getData("text");
     event.target.prepend(document.getElementById(data));
 }
 
 function getCardColor() {
     const colorArr = ["lightsalmon", "cornflowerblue", "greenyellow", "lightpink", "palevioletred", "#FED000", "violet", "orange"];
-    const index = Math.floor(Math.random() * Math.floor(colorArr.length-1));
+    const index = Math.floor(Math.random() * Math.floor(colorArr.length - 1));
     return colorArr[index];
 }
