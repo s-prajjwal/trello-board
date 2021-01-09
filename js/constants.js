@@ -1,1 +1,0 @@
-export const addModalInnerHtml = `<div id="list-name-label">List Name</div><input type="text" id="list-name-input" name="list-name" /><div id="create-list-btn-wrapper"><button id="create-list-btn" type="submit">Create List</button></div>`;

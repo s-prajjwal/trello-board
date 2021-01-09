@@ -49,7 +49,6 @@ function createList(title) {
     const addCardBtn = document.getElementById(`add-card-${title}`);
     addCardBtn.addEventListener("click", function (event) {
         event.preventDefault();
-        // createCard(this.parentNode);
         showAddCardModal.call(this, listBody);
     });
 }
@@ -87,7 +86,7 @@ function createCard(parentNode, cardTitle, cardDesc) {
     newCard.id = `${cardTitle}-card`;
     newCard.setAttribute("draggable", true);
     newCard.setAttribute("ondragstart", "drag(event)");
-    const innerHtml = `<div class="card-header"><div>${cardTitle}</div><img class="card-close" id="card-close-${cardTitle}" height="40%" src="./assets/close.svg" /></div><div class="card-body">${cardDesc}</div>`;
+    const innerHtml = `<div class="card-header"><div class="card-header-content">${cardTitle}</div><img class="card-close" id="card-close-${cardTitle}" height="40%" src="./assets/close.svg" /></div><div class="card-body">${cardDesc}</div>`;
     newCard.innerHTML = innerHtml;
     parentNode.appendChild(newCard);
     const closeIcon = document.getElementById(`card-close-${cardTitle}`);
