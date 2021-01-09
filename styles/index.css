@@ -168,6 +168,7 @@ body * {
 
 .card-close {
     cursor: pointer;
+    margin-top: 5px;
 }
 
 .modal-close{
@@ -199,10 +200,14 @@ body * {
     cursor: pointer;
     background-color: brown;
     color: white;
+    transition-timing-function: ease-in-out;
+    transition-duration: 0.3s;
+    transition-property: all;
 }
 
 .add-card:hover {
-    box-shadow: 2px 7px 6px #aaaaaa;
+    box-shadow: 0 0 0 3px #e78267;
+    transform: rotate(180deg);
 }
 
 .list-card {
@@ -214,7 +219,6 @@ body * {
     border: 1px solid black;
     overflow-y: auto;
     max-height: 200px;
-    background-color: lightsalmon;
 }
 
 .card-header {

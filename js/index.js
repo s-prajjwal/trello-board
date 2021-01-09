@@ -98,9 +98,11 @@ function showAddCardModal(parentNode) {
 
 // function to create a card
 function createCard(parentNode, cardTitle, cardDesc) {
+    const color = getCardColor();
     const newCard = document.createElement("div");
     newCard.className = "list-card";
     newCard.id = `${cardTitle}-card`;
+    newCard.style.backgroundColor = color;
     newCard.setAttribute("draggable", true);
     newCard.setAttribute("ondragstart", "drag(event)");
     const innerHtml = `<div class="card-header"><div class="card-header-content">${cardTitle}</div><img class="card-close" id="card-close-${cardTitle}" height="40%" src="./assets/close.svg" /></div><div class="card-body">${cardDesc}</div>`;
@@ -123,7 +125,13 @@ function allowDrop(event) {
 
 function drop(event) {
     event.preventDefault();
-    if(event.target.className === "card-body") return;
+    if(event.target.className !== "list-body") return;
     const data = event.dataTransfer.getData("text");
     event.target.prepend(document.getElementById(data));
+}
+
+function getCardColor() {
+    const colorArr = ["lightsalmon", "cornflowerblue", "greenyellow", "lightpink", "palevioletred", "#FED000", "violet", "orange"];
+    const index = Math.floor(Math.random() * Math.floor(colorArr.length-1));
+    return colorArr[index];
 }
