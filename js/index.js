@@ -92,7 +92,7 @@ function showAddCardModal(parentNode) {
     });
     const modalCloseBtn = document.getElementsByClassName("modal-close");
     modalCloseBtn[0].addEventListener("click", function() {
-        this.addCardModal.remove();
+        addCardModal.remove();
     });
 }
 
