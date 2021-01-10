@@ -32,12 +32,23 @@ window.addEventListener("keyup", function (event) {
         if (addListModal) addListModal.remove();
         if (addCardModal) addCardModal.remove();
     }
-})
+});
+
+function activateOverlay() {
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("main-wrapper").style.pointerEvents = "none";
+}
+
+function deactivateOverlay() {
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("main-wrapper").style.pointerEvents = "all";
+}
 
 // function to show the Modal to Add List
 function showAddListModal() {
     // create a div for Modal and all input fields to it
     // then append it to content-body/list-row div as the child
+    activateOverlay();
     const addListModal = document.createElement("div");
     addListModal.className = "modal-wrapper";
     addListModal.id = "add-list-modal";
@@ -50,6 +61,7 @@ function showAddListModal() {
         const newTitle = document.getElementById("list-name-input").value;
         const newList = insertList(newTitle);
         createList(newList);
+        deactivateOverlay();
         addListModal.remove();
     });
     // Pressing enter will submit the title and create a new list
@@ -62,6 +74,7 @@ function showAddListModal() {
     });
     const modalCloseBtn = document.getElementsByClassName("modal-close");
     modalCloseBtn[0].addEventListener("click", function () {
+        deactivateOverlay();
         addListModal.remove();
     });
 }
@@ -92,6 +105,7 @@ function createList(newListData) {
 
 // function to show the Modal to add Add Card
 function showAddCardModal(titleId) {
+    activateOverlay();
     const addCardModal = document.createElement("div");
     addCardModal.className = "modal-wrapper";
     addCardModal.id = "add-card-modal";
@@ -106,6 +120,7 @@ function showAddCardModal(titleId) {
         const newCard = insertCard(titleId, newCardTitle, newCardDesc);
         const cardColor = findList(titleId).cardColor;
         createCard(titleId, newCard, cardColor);
+        deactivateOverlay();
         addCardModal.remove();
     });
     const cardDescTxtArea = document.getElementById("card-desc-text-area");
@@ -117,6 +132,7 @@ function showAddCardModal(titleId) {
     });
     const modalCloseBtn = document.getElementsByClassName("modal-close");
     modalCloseBtn[0].addEventListener("click", function () {
+        deactivateOverlay();
         addCardModal.remove();
     });
 }
