@@ -15,14 +15,13 @@ window.onload = function () {
         cardColor: getCardColor(),
         cards: [{ id: getId(), cardTitle: "UAT Testing", cardDesc: "Ask engg. to setup testing infrastructure" }]
     }]
-    console.log("I had came here")
-    let lists = window.localStorage.getItem('lists');
+    let lists = JSON.parse(localStorage.getItem('lists'));
 
     if (!lists) {
-        window.localStorage.setItem("lists", JSON.stringify(initalData));
-        lists = window.localStorage
+        localStorage.setItem("lists", JSON.stringify(initalData));
+        lists = JSON.parse(localStorage.getItem("lists"));
     }
-    createInitalListsAndCards(JSON.parse(lists));
+    createInitalListsAndCards(lists);
 };
 
 window.addEventListener("keyup", function (event) {
@@ -49,8 +48,8 @@ function showAddListModal() {
     createListBtn.addEventListener("click", function (event) {
         event.preventDefault();
         const newTitle = document.getElementById("list-name-input").value;
-        insertList(newTitle);
-        createList(newTitle);
+        const newList = insertList(newTitle);
+        createList(newList);
         addListModal.remove();
     });
     // Pressing enter will submit the title and create a new list
@@ -68,29 +67,31 @@ function showAddListModal() {
 }
 
 // function to create a list
-function createList(title) {
+function createList(newListData) {
+    const { id: listId, title } = newListData;
     const newList = document.createElement("div");
-    const innerHtml = `<div class="list-header"><div id="list-title">${title}</div><img class="list-close" id="list-close-${title}" height="50%" src="./assets/close.svg" /></div><div id="list-body-${title}" class="list-body"></div><div class="list-footer"><div type="submit" class="add-card" id="add-card-${title}">+</div></div>`;
+    const innerHtml = `<div class="list-header"><div id="list-title">${title}</div><img class="list-close" id="list-close-${listId}" height="50%" src="./assets/close.svg" /></div><div id="list-body-${listId}" class="list-body"></div><div class="list-footer"><div type="submit" class="add-card" id="add-card-${listId}">+</div></div>`;
     newList.innerHTML = innerHtml;
-    newList.id = `${title}-list`;
+    newList.id = `${listId}-list`;
     newList.className = "list";
     newList.setAttribute("ondragover", "allowDrop(event)");
     newList.setAttribute("ondrop", "drop(event)");
     listWrapper.appendChild(newList);
-    const closeIcon = document.getElementById(`list-close-${title}`);
+    const closeIcon = document.getElementById(`list-close-${listId}`);
     closeIcon.addEventListener("click", function (event) {
         event.preventDefault();
         this.parentNode.parentNode.remove();
+        deleteList(listId);
     });
-    const addCardBtn = document.getElementById(`add-card-${title}`);
+    const addCardBtn = document.getElementById(`add-card-${listId}`);
     addCardBtn.addEventListener("click", function (event) {
         event.preventDefault();
-        showAddCardModal.call(this, title);
+        showAddCardModal.call(this, listId);
     });
 }
 
 // function to show the Modal to add Add Card
-function showAddCardModal(listTitle) {
+function showAddCardModal(titleId) {
     const addCardModal = document.createElement("div");
     addCardModal.className = "modal-wrapper";
     addCardModal.id = "add-card-modal";
@@ -102,9 +103,9 @@ function showAddCardModal(listTitle) {
         event.preventDefault();
         const newCardTitle = document.getElementById("card-title-input").value;
         const newCardDesc = document.getElementById("card-desc-text-area").value;
-        insertCard(listTitle, newCardTitle, newCardDesc);
-        const cardColor = findList(listTitle).cardColor;
-        createCard(listTitle, newCardTitle, newCardDesc, cardColor);
+        const newCard = insertCard(titleId, newCardTitle, newCardDesc);
+        const cardColor = findList(titleId).cardColor;
+        createCard(titleId, newCard, cardColor);
         addCardModal.remove();
     });
     const cardDescTxtArea = document.getElementById("card-desc-text-area");
@@ -121,27 +122,29 @@ function showAddCardModal(listTitle) {
 }
 
 // function to create a card
-function createCard(listTitle, cardTitle, cardDesc, cardColor) {
-    console.log("cardColor - ", cardColor);
+function createCard(listId, newCardData, cardColor) {
+    const { id: newCardId, cardTitle, cardDesc } = newCardData;
     const newCard = document.createElement("div");
     newCard.className = "list-card";
-    newCard.id = `${cardTitle}-card`;
+    newCard.id = `${newCardId}-card`;
     newCard.style.backgroundColor = cardColor;
     newCard.setAttribute("draggable", true);
     newCard.setAttribute("ondragstart", "drag(event)");
-    const innerHtml = `<div class="card-header"><div class="card-header-content">${cardTitle}</div><img class="card-close" id="card-close-${cardTitle}" height="40%" src="./assets/close.svg" /></div><div class="card-body">${cardDesc}</div>`;
+    const innerHtml = `<div class="card-header"><div class="card-header-content">${cardTitle}</div><img class="card-close" id="card-close-${newCardId}" height="40%" src="./assets/close.svg" /></div><div class="card-body">${cardDesc}</div>`;
     newCard.innerHTML = innerHtml;
-    const parentNode = document.getElementById(`list-body-${listTitle}`);
+    const parentNode = document.getElementById(`list-body-${listId}`);
     parentNode.appendChild(newCard);
-    const closeIcon = document.getElementById(`card-close-${cardTitle}`);
+    const closeIcon = document.getElementById(`card-close-${newCardId}`);
     closeIcon.addEventListener("click", function (event) {
         event.preventDefault();
         this.parentNode.parentNode.remove();
+        deleteCard(newCardId, listId);
     });
 }
 
 function drag(event) {
-    event.dataTransfer.setData("text", event.target.id);
+    event.dataTransfer.setData("cardId", event.target.id);
+    event.dataTransfer.setData("oldListId", event.target.parentNode.id);
 }
 
 function allowDrop(event) {
@@ -151,12 +154,20 @@ function allowDrop(event) {
 function drop(event) {
     event.preventDefault();
     if (event.target.className !== "list-body") return;
-    const data = event.dataTransfer.getData("text");
+    const data = event.dataTransfer.getData("cardId");
+    const oldListId = event.dataTransfer.getData("oldListId").replace("list-body-", "");
+    const cardId = data.replace("-card", "");
+    const newListId = event.target.id.replace("list-body-", "");
     event.target.prepend(document.getElementById(data));
+    event.target.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+    moveCard(oldListId, cardId, newListId);
 }
 
 function getCardColor() {
-    const colorArr = ["lightsalmon", "cornflowerblue", "greenyellow", "lightpink", "palevioletred", "#FED000", "violet", "orange"];
+    const colorArr = ["lightsalmon", "cornflowerblue", "greenyellow", "lightpink", "palevioletred", "#fef27d", "violet", "orange"];
     const index = Math.floor(Math.random() * Math.floor(colorArr.length - 1));
     return colorArr[index];
 }
@@ -170,23 +181,22 @@ function getId() {
 
 function createInitalListsAndCards(lists) {
     for (let i = 0; i < lists.length; i++) {
-        const listTitle = lists[i].title;
-        const cardColor = lists[i].cardColor;
-        createList(listTitle);
+        const { id: listId, cardColor } = lists[i];
+        createList(lists[i]);
         for (let j = 0; j < lists[i].cards.length; j++) {
             const currCard = lists[i].cards[j];
-            createCard(listTitle, currCard.cardTitle, currCard.cardDesc, cardColor);
+            createCard(listId, currCard, cardColor);
         }
     }
 }
 
-function findList(id){
-    const reqList = JSON.parse(localStorage.getItem("lists")).filter(list=> list.title === id)[0];
+function findList(id) {
+    const reqList = JSON.parse(localStorage.getItem("lists")).filter(list => list.id === id)[0];
     return reqList;
 }
 
-function findCard(listId, cardId){
-    const reqCard = findList(listId).cards.filter(card => card.id === cardId);
+function findCard(listId, cardId) {
+    const reqCard = findList(listId).cards.filter(card => card.id === cardId)[0];
     return reqCard;
 }
 
@@ -200,9 +210,10 @@ function insertList(newTitle) {
     }
     currLists.push(newList);
     localStorage.setItem("lists", JSON.stringify(currLists));
+    return newList;
 }
 
-function insertCard(listId, cardTitle, cardDesc){
+function insertCard(listId, cardTitle, cardDesc) {
     const currLists = JSON.parse(localStorage.getItem("lists"));
     const newCard = {
         id: getId(),
@@ -210,10 +221,42 @@ function insertCard(listId, cardTitle, cardDesc){
         cardDesc
     }
     currLists.forEach(list => {
-        // change list.title to list.id later when id logic is implemented
-        if(list.title === listId){
+        if (list.id === listId) {
             list.cards.push(newCard);
         }
     });
     localStorage.setItem("lists", JSON.stringify(currLists));
+    return newCard;
+}
+
+function moveCard(oldListId, cardId, newListId) {
+    const currListsData = JSON.parse(localStorage.getItem("lists"));
+    const card = findCard(oldListId, cardId);
+    const oldList = findList(oldListId);
+    oldList.cards = oldList.cards.filter(card => card.id !== cardId);
+    const newList = findList(newListId);
+    newList.cards.unshift(card);
+    const newListsData = currListsData.map(list => {
+        if (list.id === oldListId) return oldList;
+        if (list.id === newListId) return newList;
+        return list;
+    });
+    localStorage.setItem("lists", JSON.stringify(newListsData));
+}
+
+function deleteList(listId) {
+    const currListsData = JSON.parse(localStorage.getItem("lists"));
+    const newListsData = currListsData.filter(list => list.id !== listId);
+    localStorage.setItem("lists", JSON.stringify(newListsData));
+}
+
+function deleteCard(cardId, listId) {
+    let reqList = findList(listId);
+    reqList.cards = reqList.cards.filter(card => card.id !== cardId);
+    const currListsData = JSON.parse(localStorage.getItem("lists"));
+    const newListsData = currListsData.map(list => {
+        if (list.id === listId) return reqList;
+        return list;
+    });
+    localStorage.setItem("lists", JSON.stringify(newListsData));
 }
