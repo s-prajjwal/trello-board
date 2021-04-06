@@ -31,6 +31,7 @@ window.addEventListener("keyup", function (event) {
         event.preventDefault();
         if (addListModal) addListModal.remove();
         if (addCardModal) addCardModal.remove();
+        deactivateOverlay();
     }
 });
 
